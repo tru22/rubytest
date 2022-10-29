@@ -12,6 +12,7 @@ def pset(x, y, r, g, b, width, height)
     $img[y][x].r = r
     $img[y][x].g = g
     $img[y][x].b = b
+    puts("#{x}, #{y}, yes")
   end
 end
 
@@ -33,13 +34,13 @@ writeimage(file_path)
 def writeRect(x, y, len, r, g, b, width, height)
   x.step(x + len) do |i|
     y.step(y + len) do |j|
-      pset(x + i, y + j, r, g, b, width, height)
+      pset(i, j, r, g, b, width, height)
     end
   end
 end
 
 
-writeRect(40, 99, 50, 0, 0, 0, $img[0].length, $img.length)
+writeRect(250, 20, 50, 0, 0, 0, $img[0].length, $img.length)
 writeimage(file_path)
 
 
