@@ -12,7 +12,7 @@ def pset(x, y, r, g, b, width, height)
     $img[y][x].r = r
     $img[y][x].g = g
     $img[y][x].b = b
-    puts("#{x}, #{y}, yes")
+    #puts("#{x}, #{y}, yes")
   end
 end
 
@@ -39,10 +39,58 @@ def writeRect(x, y, len, r, g, b, width, height)
   end
 end
 
-
+=begin
 writeRect(250, 20, 50, 0, 0, 0, $img[0].length, $img.length)
 writeimage(file_path)
+=end
 
+def writeLinear(m, c, r, g, b, width, height)
+  0.step(width) do |i|
+    j = m * i + c
+    pset(i, j, r, g, b, width, height)
+  end
+end
 
-#def writeLine(x, y, a, b, r, g, b, width, height)
-#  (a * x).step() do |i|
+=begin
+writeLinear(0.3, 20, 0, 0, 0, $img[0].length, $img.length)
+writeimage(file_path)
+=end
+
+def writeTriangle(x, y, tri_height, r, g, b, width, height)
+  y.step(y + tri_height) do |i|
+    for k in (x - (i - y))..(x + (i - y)) do
+      pset(k, i, r, g, b, width, height)
+    end
+  end
+end
+
+=begin
+writeTriangle(100, 30, 100, 0, 0, 0, $img[0].length, $img.length)
+writeimage(file_path)
+=end
+
+def writeFillcircle(x0, y0, rad, r = 0, g = 0, b = 0, width = $img[0].length, height = $img.length)
+  width.times do |y|
+    height.times do |x|
+      if (x - x0) ** 2 + (y - y0) ** 2 <= rad ** 2
+        if block_given?
+          yield x, y
+        else
+          pset(x, y, r, g, b, width, height)
+        end
+      end
+    end
+  end
+end
+
+def writePacman(x0, y0, rad, width, height)
+  writeFillcircle(x0, y0, rad) do |x, y| # block_given?
+    theta = Math.atan2(y - 120, x - 100) * 180 / Math::PI
+    if theta > 15 or theta < - 15
+      pset(x, y, 255, 0, 0, width, height)
+    end
+  end
+end
+
+writePacman(100, 120, 80, $img[0].length, $img.length)
+writeimage(file_path)
